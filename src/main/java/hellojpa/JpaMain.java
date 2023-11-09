@@ -23,24 +23,18 @@ public class JpaMain {
 
         try {
 
-            //조회
-            Member findMember = em.find(Member.class, 1L); //자바 컬렉션과 같은 의미(객체를 대신 저장해주는 역할..?)
-            /*
-            JPQL : 원하는 데이터를 특정해서 가지고 오기 위한 개념
-            jpa는 대상을 기준으로 쿼리를 만들지 않는다 - >객체를 대상으로 쿼리를 만든다(엔티티 객체를 대상으로 쿼리를 날리는 객체지향 언어 jpsql을 사용가능)
-            (sql은 데이터베이스 테이블을 대상으로 쿼리)
-            jpa는 객체지향 쿼리로 persistence.xml에서 설정한 DB방언에 맞게 쿼리를 작성해 준다.
-            * */
-            List<Member> result = em.createQuery("select m from Member as m", Member.class) //Member.class : 타입 (m : member 엔티티)
-                    .setFirstResult(1) 
-                    .setMaxResults(10) //1번 부터 10개 가지로 오라는 의미(페이지 네이션)
-                   .getResultList();
+            //엔티티 비영속 상태(JPA와 아무 관련이 없다.)
+            Member member = new Member();
+            member.setId(100L);
+            member.setName("HelloJPA");
 
-            for(Member member : result){
-                System.out.println("member.name : " + member.getName());
-            }
+            //영속 상태태 (persist에 들어가서 member가 관리 된다.)
+            System.out.println("Before");
+           em.persist(member);
+//           em.detach(member); //영속성 상태를 지운다
+            System.out.println("After");
 
-            tx.commit();
+            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
         } catch (Exception e) {
             tx.rollback();
         } finally {
