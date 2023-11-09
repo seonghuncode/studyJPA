@@ -15,6 +15,15 @@ public class Member {
     //@Column(name = "name) -> 실제 테이블에 있는 컬럼 이름이랑 변수명이 다를 경우 맵핑 할때 사용
     private String name;
 
+    public Member(){ //기본생성자가 있어야 문제가 발생하지 않는다.
+
+    }
+
+    public Member(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

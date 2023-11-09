@@ -23,18 +23,12 @@ public class JpaMain {
 
         try {
 
-            //엔티티 비영속 상태(JPA와 아무 관련이 없다.)
-            Member member = new Member();
-            member.setId(100L);
-            member.setName("HelloJPA");
+            Member member = em.find(Member.class, 150L);
+            member.setName("AAAAAA");
 
-            //영속 상태태 (persist에 들어가서 member가 관리 된다.)
-            System.out.println("Before");
-           em.persist(member);
-//           em.detach(member); //영속성 상태를 지운다
-            System.out.println("After");
+            em.detach(member); //mmeber를 영속성 관리에서 제거한다(더이상 JPA에서 관리를 하지 않는다) -> commit을 해도 아무일도 일어나지 않는다
 
-            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
+           tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
         } catch (Exception e) {
             tx.rollback();
         } finally {
