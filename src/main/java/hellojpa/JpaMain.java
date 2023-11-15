@@ -23,10 +23,19 @@ public class JpaMain {
 
         try {
 
-            Member member = em.find(Member.class, 150L);
-            member.setName("AAAAAA");
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            em.detach(member); //mmeber를 영속성 관리에서 제거한다(더이상 JPA에서 관리를 하지 않는다) -> commit을 해도 아무일도 일어나지 않는다
+            Member member = new Member();
+            member.setUsername("Member1");
+            member.setTeamId(team.getId()); //member를 Team에 소속 시키기 위해서
+            em.persist(member);
+
+            //특정 멤버에 대한 팀을 찾을 경우 거쳐야 하는 단계가 복잡하다. -> 연관관계가 없기 때문에
+            Member findMember = em.find(Member.class, member.getId());
+            Long findTeamId = findMember.getTeamId() ;
+            Team findTeam = em.find(Team.class, findTeamId);
 
            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
         } catch (Exception e) {
