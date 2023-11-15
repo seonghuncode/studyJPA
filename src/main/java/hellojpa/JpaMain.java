@@ -42,6 +42,12 @@ public class JpaMain {
             Team findTeam = findMember.getTeam();
             System.out.println("findTeam = " + findTeam.getName());
 
+            //값을 수정하는 방법 (Team을 수정 하는 방법)
+            //1. 원하는 데이터를 찾는다
+            Team newTeam = em.find(Team.class, 100L);
+            //2. 수정
+            findMember.setTeam(newTeam);
+
            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
         } catch (Exception e) {
             tx.rollback();
