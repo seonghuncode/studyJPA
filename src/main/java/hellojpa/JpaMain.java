@@ -23,19 +23,24 @@ public class JpaMain {
 
         try {
 
+            //저장
             Team team = new Team();
             team.setName("TeamA");
             em.persist(team);
 
             Member member = new Member();
             member.setUsername("Member1");
-            member.setTeamId(team.getId()); //member를 Team에 소속 시키기 위해서
+            member.setTeam(team); //team을 넣어주면 JPA에서 알아서 team에서 PK값을 꺼내 insert할때 FK값으로 사용한다
             em.persist(member);
 
-            //특정 멤버에 대한 팀을 찾을 경우 거쳐야 하는 단계가 복잡하다. -> 연관관계가 없기 때문에
+            //캐시값을 초기화시켜 실제 DB에서 값을 꺼내오는 과정을 확인하고 싶을 경우 캐시 초기화 방법법
+           em.flush();
+            em.clear();
+
             Member findMember = em.find(Member.class, member.getId());
-            Long findTeamId = findMember.getTeamId() ;
-            Team findTeam = em.find(Team.class, findTeamId);
+
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam = " + findTeam.getName());
 
            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
         } catch (Exception e) {
