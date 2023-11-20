@@ -22,7 +22,6 @@ public class JpaMain {
 
 
         try {
-
             //저장
             Team team = new Team();
             team.setName("TeamA");
@@ -30,19 +29,22 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("Member1");
-            member.setTeam(team); //team을 넣어주면 JPA에서 알아서 team에서 PK값을 꺼내 insert할때 FK값으로 사용한다
+            member.setTeam(team);
             em.persist(member);
+
+            team.getMembers().add(member);
+
 
             //캐시값을 초기화시켜 실제 DB에서 값을 꺼내오는 과정을 확인하고 싶을 경우 캐시 초기화 방법법
             em.flush();
             em.clear();
 
-            Member findMember = em.find(Member.class, member.getId());
-            List<Member> members = findMember.getTeam().getMembers();
-
+            Team findTeam = em.find(Team.class, team.getId());
+            List<Member> members = findTeam.getMembers();
             for(Member m : members){
                 System.out.println("m : " + m.getUsername());
             }
+
 
 
             tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
