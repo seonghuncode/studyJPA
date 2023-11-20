@@ -34,21 +34,19 @@ public class JpaMain {
             em.persist(member);
 
             //캐시값을 초기화시켜 실제 DB에서 값을 꺼내오는 과정을 확인하고 싶을 경우 캐시 초기화 방법법
-           em.flush();
+            em.flush();
             em.clear();
 
             Member findMember = em.find(Member.class, member.getId());
+            List<Member> members = findMember.getTeam().getMembers();
 
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam = " + findTeam.getName());
+            for(Member m : members){
+                System.out.println("m : " + m.getUsername());
+            }
 
-            //값을 수정하는 방법 (Team을 수정 하는 방법)
-            //1. 원하는 데이터를 찾는다
-            Team newTeam = em.find(Team.class, 100L);
-            //2. 수정
-            findMember.setTeam(newTeam);
 
-           tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
+            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
+
         } catch (Exception e) {
             tx.rollback();
         } finally {
