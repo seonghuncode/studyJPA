@@ -20,7 +20,7 @@ public class Member {
     private Team team;
 
     @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
+    @JoinColumn(name = "LOCKER_ID") //주인
     private Locker locker;
 
     public Long getId() {
