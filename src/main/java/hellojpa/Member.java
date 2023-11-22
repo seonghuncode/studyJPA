@@ -15,6 +15,10 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) //매핑은 되지만 읽기 전용으로 반영을 하지 않는 설정
+    private Team team;
+
     public Long getId() {
         return id;
     }
