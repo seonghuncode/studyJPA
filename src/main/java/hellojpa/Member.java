@@ -19,6 +19,10 @@ public class Member {
     @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) //매핑은 되지만 읽기 전용으로 반영을 하지 않는 설정
     private Team team;
 
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
+
     public Long getId() {
         return id;
     }
