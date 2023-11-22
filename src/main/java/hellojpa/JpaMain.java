@@ -22,30 +22,17 @@ public class JpaMain {
 
 
         try {
-            //저장
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
 
             Member member = new Member();
-            member.setUsername("Member1");
-            member.setTeam(team);
+            member.setUsername("member1");
+
             em.persist(member);
 
+            Team team = new Team();
+            team.setName("teamA");
             team.getMembers().add(member);
 
-
-            //캐시값을 초기화시켜 실제 DB에서 값을 꺼내오는 과정을 확인하고 싶을 경우 캐시 초기화 방법법
-            em.flush();
-            em.clear();
-
-            Team findTeam = em.find(Team.class, team.getId());
-            List<Member> members = findTeam.getMembers();
-            for(Member m : members){
-                System.out.println("m : " + m.getUsername());
-            }
-
-
+            em.persist(team);
 
             tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
 

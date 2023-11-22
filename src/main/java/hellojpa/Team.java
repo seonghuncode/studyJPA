@@ -12,8 +12,8 @@ public class Team {
     private Long id;
     private String name;
 
-    //new ArrayList로 초기화하는 이유 : add시 null point가 뜨지 않기 위함
-    @OneToMany(mappedBy = "team") //어떤것이랑 연결되어 있는지 연결된 변수명을 입력해 주면 된다.
+    @OneToMany
+    @JoinColumn(name = "TEAM_ID")
     private List<Member> members = new ArrayList<>();
 
     public Long getId() {
