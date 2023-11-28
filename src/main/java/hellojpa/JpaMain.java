@@ -23,16 +23,21 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("member1");
+            Movie movie = new Movie();
+            movie.setDirector("aaa");
+            movie.setActor("bbbb");
+            movie.setName("wind");
+            movie.setPrice(1000);
 
-            em.persist(member);
+            em.persist(movie);
 
-            Team team = new Team();
-            team.setName("teamA");
-            team.getMembers().add(member);
+            //영속성 컨텍스트에 있는것을 초기화
+            em.flush();
+            em.clear();
 
-            em.persist(team);
+            //조회시 join으로 불러온다
+            Movie findMovie = em.find(Movie.class, movie.getId());
+            System.out.println("findMovie : " + findMovie);
 
             tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
 
