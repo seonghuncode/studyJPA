@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -23,21 +24,16 @@ public class JpaMain {
 
         try {
 
-            Movie movie = new Movie();
-            movie.setDirector("aaa");
-            movie.setActor("bbbb");
-            movie.setName("wind");
-            movie.setPrice(1000);
+            Member member = new Member();
+            member.setUsername("user1");
+            member.setCreatedBy("You");
+            member.setCreatedDate(LocalDateTime.now());
 
-            em.persist(movie);
+            em.persist(member);
 
             //영속성 컨텍스트에 있는것을 초기화
             em.flush();
             em.clear();
-
-            //조회시 join으로 불러온다
-            Movie findMovie = em.find(Movie.class, movie.getId());
-            System.out.println("findMovie : " + findMovie);
 
             tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
 
