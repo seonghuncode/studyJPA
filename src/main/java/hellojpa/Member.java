@@ -18,16 +18,40 @@ public class Member extends  BaseEntity{
     @Column(name = "USERNAME")
     private String username;
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false) //매핑은 되지만 읽기 전용으로 반영을 하지 않는 설정
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+//    public Locker getLocker() {
+//        return locker;
+//    }
+//
+//    public void setLocker(Locker locker) {
+//        this.locker = locker;
+//    }
+
+//    public List<MemberProduct> getMemberProduct() {
+//        return memberProduct;
+//    }
+//
+//    public void setMemberProduct(List<MemberProduct> memberProduct) {
+//        this.memberProduct = memberProduct;
+//    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID") //주인
-    private Locker locker;
-
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProduct = new ArrayList<>();
+//    @OneToOne
+//    @JoinColumn(name = "LOCKER_ID") //주인
+//    private Locker locker;
+//
+//    @OneToMany(mappedBy = "member")
+//    private List<MemberProduct> memberProduct = new ArrayList<>();
 
     public Long getId() {
         return id;
