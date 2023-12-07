@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
 
@@ -23,16 +24,34 @@ public class JpaMain {
 
         try {
 
-            Address address = new Address("city", "street", "1000");
-
             Member member = new Member();
             member.setUsername("member1");
-            member.setHomeAddress(address);
+            member.setHomeAddress(new Address("homeCity", "street", "1000"));
+
+            member.getFavoriteFoods().add("aaa");
+            member.getFavoriteFoods().add("bbb");
+            member.getFavoriteFoods().add("ccc");
+
+            member.getAddressHistory().add(new Address("old1", "street1", "1111"));
+            member.getAddressHistory().add(new Address("old2", "street2", "1111"));
+
             em.persist(member);
 
-            Address newAddress = new Address("newAddress", address.getStreet(), address.getZipcode());
-            member.setHomeAddress(newAddress);
+            em.flush();
+            em.clear();
 
+            System.out.println("======================================");
+            Member fidndMember = em.find(Member.class, member.getId());
+
+            List<Address> addressHistory = fidndMember.getAddressHistory();
+            for(Address address : addressHistory){
+                System.out.println("address : " + address.getCity());
+            }
+
+            Set<String> favoriteFoods = fidndMember.getFavoriteFoods();
+            for (String favoriteFood : favoriteFoods){
+                System.out.println("favoritFodds : " + favoriteFood);
+            }
 
             tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
 
