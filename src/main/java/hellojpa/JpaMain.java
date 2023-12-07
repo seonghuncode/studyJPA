@@ -23,12 +23,15 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("hello");
-            member.setHomeAddress(new Address("city", "street", "111"));
-            member.setWorkPeriod(new Period());
+            Address address = new Address("city", "street", "1000");
 
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(address);
             em.persist(member);
+
+            Address newAddress = new Address("newAddress", address.getStreet(), address.getZipcode());
+            member.setHomeAddress(newAddress);
 
 
             tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
