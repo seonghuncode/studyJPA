@@ -41,19 +41,26 @@ public class JpaMain {
             em.clear();
 
             System.out.println("======================================");
-            Member fidndMember = em.find(Member.class, member.getId());
+            Member findMember = em.find(Member.class, member.getId());
 
-            List<Address> addressHistory = fidndMember.getAddressHistory();
-            for(Address address : addressHistory){
-                System.out.println("address : " + address.getCity());
-            }
+            //homeCity -> newCity로 수정할 경우
+            //값타입 잘못된 수정 방법
+            //findMember.getHomeAddress().setCity("newCity");
 
-            Set<String> favoriteFoods = fidndMember.getFavoriteFoods();
-            for (String favoriteFood : favoriteFoods){
-                System.out.println("favoritFodds : " + favoriteFood);
-            }
+            //값 타입 옳은 수정 방법 : Address 인스턴스 자체를 새것으로 바구어 주어야 한다.
+            Address a = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newcity", a.getStreet(), a.getZipcode()));
 
-            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
+            //컬렉션에 있는 치킨 -> 한식으로 수정할 경우
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("한식");
+
+            //주소를 변경할 경우
+            System.out.println("======================================");
+            findMember.getAddressHistory().remove(new Address("old1", "street1", "1111")); //지우기 위해서는 Address클래스에 equeals를 오버라이드 구현을 해주어야 한다.(이유  : 기본은 == 비교이기 대문에 변경 필요)
+            findMember.getAddressHistory().add(new Address("newCity1", "street1", "1111"));
+
+           tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
 
         } catch (Exception e) {
             tx.rollback();
