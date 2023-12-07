@@ -32,8 +32,8 @@ public class JpaMain {
             member.getFavoriteFoods().add("bbb");
             member.getFavoriteFoods().add("ccc");
 
-            member.getAddressHistory().add(new Address("old1", "street1", "1111"));
-            member.getAddressHistory().add(new Address("old2", "street2", "1111"));
+            member.getAddressHistory().add(new AddressEntity("old1", "street1", "1111"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street2", "1111"));
 
             em.persist(member);
 
@@ -57,8 +57,8 @@ public class JpaMain {
 
             //주소를 변경할 경우
             System.out.println("======================================");
-            findMember.getAddressHistory().remove(new Address("old1", "street1", "1111")); //지우기 위해서는 Address클래스에 equeals를 오버라이드 구현을 해주어야 한다.(이유  : 기본은 == 비교이기 대문에 변경 필요)
-            findMember.getAddressHistory().add(new Address("newCity1", "street1", "1111"));
+//            findMember.getAddressHistory().remove(new Address("old1", "street1", "1111")); //지우기 위해서는 Address클래스에 equeals를 오버라이드 구현을 해주어야 한다.(이유  : 기본은 == 비교이기 대문에 변경 필요)
+//            findMember.getAddressHistory().add(new Address("newCity1", "street1", "1111"));
 
            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
 

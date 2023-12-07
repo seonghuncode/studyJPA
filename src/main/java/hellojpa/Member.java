@@ -48,20 +48,19 @@ public class Member {
         this.favoriteFoods = favoriteFoods;
     }
 
-    public List<Address> getAddressHistory() {
-        return addressHistory;
-    }
 
-    public void setAddressHistory(List<Address> addressHistory) {
-        this.addressHistory = addressHistory;
-    }
 
-    @ElementCollection //매핑하는 어노테이션
-    @CollectionTable(name = "ADDRESS", joinColumns =
-        @JoinColumn(name = "MEMBER_ID") //외래키로 잡는다.
-    )
-    private List<Address> addressHistory = new ArrayList<>();
+//    //값 타입 매핑 방법
+//    @ElementCollection //매핑하는 어노테이션
+//    @CollectionTable(name = "ADDRESS", joinColumns =
+//        @JoinColumn(name = "MEMBER_ID") //외래키로 잡는다.
+//    )
+//    private List<Address> addressHistory = new ArrayList<>();
 
+    //엔티티 매핑 방법 (값타입을 사용할 경우 복작하기 때문에 엔티티 매핑을 고려)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID") //1대다 단방향 매핑
+    private List<AddressEntity> addressHistory = new ArrayList<>();
 
 
     public Member() {
@@ -97,5 +96,13 @@ public class Member {
 
     public void setHomeAddress(Address homeAddress) {
         this.homeAddress = homeAddress;
+    }
+
+    public List<AddressEntity> getAddressHistory() {
+        return addressHistory;
+    }
+
+    public void setAddressHistory(List<AddressEntity> addressHistory) {
+        this.addressHistory = addressHistory;
     }
 }
