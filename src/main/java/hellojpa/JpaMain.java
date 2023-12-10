@@ -27,21 +27,7 @@ public class JpaMain {
 
         try {
 
-            //Criteria 사용 준비
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Member> query = cb.createQuery(Member.class);
-
-            Root<Member> m = query.from(Member.class);
-
-            CriteriaQuery<Member> cq = query.select(m);
-
-            //CriteriaQuery를 사용하면 동적으로 사용하는데 장점이 있다. (실무에서 추천X -> 유지보수가 쉽지 않다(가독성이 낮다, sql 같지가 않기 때문))
-           String username = "test";
-            if(username != null){
-                cq.where(cb.equal(m.get("username"), "kim"));
-            }
-
-            List<Member> resultList = em.createQuery(cq)
+            em.createNativeQuery("select MEMBER_ID, city, street, zipcode, USERNAME from MEMBER ")
                     .getResultList();
 
             tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
