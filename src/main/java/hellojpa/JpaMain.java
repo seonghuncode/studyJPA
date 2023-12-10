@@ -23,42 +23,16 @@ public class JpaMain {
 
 
         try {
+            //jsql은 엔티티를 대상으로 한다.
+           // Member는 테이블이 아닌 엔티티를 가르킨다. (엔티티에 대한 쿼리를 실행하면 jpa에서 엔티티의 매핑 정보를 읽고 적절한 sql 쿼리를 만들어 DB에 요청한다.)
+            List<Member> result = em.createQuery(
+                    "select m From Member as m where m.username like '%kim%'",
+                    Member.class
+            ).getResultList();
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(new Address("homeCity", "street", "1000"));
-
-            member.getFavoriteFoods().add("aaa");
-            member.getFavoriteFoods().add("bbb");
-            member.getFavoriteFoods().add("ccc");
-
-            member.getAddressHistory().add(new AddressEntity("old1", "street1", "1111"));
-            member.getAddressHistory().add(new AddressEntity("old2", "street2", "1111"));
-
-            em.persist(member);
-
-            em.flush();
-            em.clear();
-
-            System.out.println("======================================");
-            Member findMember = em.find(Member.class, member.getId());
-
-            //homeCity -> newCity로 수정할 경우
-            //값타입 잘못된 수정 방법
-            //findMember.getHomeAddress().setCity("newCity");
-
-            //값 타입 옳은 수정 방법 : Address 인스턴스 자체를 새것으로 바구어 주어야 한다.
-            Address a = findMember.getHomeAddress();
-            findMember.setHomeAddress(new Address("newcity", a.getStreet(), a.getZipcode()));
-
-            //컬렉션에 있는 치킨 -> 한식으로 수정할 경우
-            findMember.getFavoriteFoods().remove("치킨");
-            findMember.getFavoriteFoods().add("한식");
-
-            //주소를 변경할 경우
-            System.out.println("======================================");
-//            findMember.getAddressHistory().remove(new Address("old1", "street1", "1111")); //지우기 위해서는 Address클래스에 equeals를 오버라이드 구현을 해주어야 한다.(이유  : 기본은 == 비교이기 대문에 변경 필요)
-//            findMember.getAddressHistory().add(new Address("newCity1", "street1", "1111"));
+            for(Member member : result){
+                System.out.println("member : " + member);
+            }
 
            tx.commit(); // -> 이때 DB에 쿼라가 날라간다.
 
